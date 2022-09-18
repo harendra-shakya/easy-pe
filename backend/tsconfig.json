@@ -8,5 +8,5 @@
         "declaration": true
     },
     "include": ["./deploy", "./typechain"],
-    "files": ["./hardhat.config.ts", "./helper-hardhat-config.ts", "utils/verify.ts"]
+    "files": ["./hardhat.config.ts", "utils/verify.ts"]
 }
