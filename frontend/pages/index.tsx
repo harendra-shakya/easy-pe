@@ -1,24 +1,15 @@
-import { useMoralis } from "react-moralis";
-import Main from "../components/Main";
+import type { NextPage } from "next";
+import dynamic from "next/dynamic";
 
-export default function Home(): JSX.Element {
-    const { isWeb3Enabled, chainId, account } = useMoralis();
+const App = dynamic(
+    () => {
+        return import("./App");
+    },
+    { ssr: false }
+);
 
-    return (
-        <div>
-            {isWeb3Enabled ? (
-                <div>
-                    {parseInt(chainId!) === 80001 ? ( // change it to skale
-                        <div>
-                            <Main />
-                        </div>
-                    ) : (
-                        <div>Plz Connect to SKALE network</div>
-                    )}
-                </div>
-            ) : (
-                <div>Please Connect Your Wallet</div>
-            )}
-        </div>
-    );
-}
+const Home: NextPage = () => {
+    return <App />;
+};
+
+export default Home;
