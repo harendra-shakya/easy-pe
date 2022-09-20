@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 
 const App = dynamic(
     () => {
-        return import("./App");
+        return import("../components/App");
     },
     { ssr: false }
 );
