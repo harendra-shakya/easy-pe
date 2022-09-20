@@ -1,15 +1,20 @@
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
+import styles from "../styles/Home.module.css";
 
-const App = dynamic(
+const Login = dynamic(
     () => {
-        return import("../components/App");
+        return import("../components/Login");
     },
     { ssr: false }
 );
 
 const Home: NextPage = () => {
-    return <App />;
+    return (
+        <div>
+            <Login />
+        </div>
+    );
 };
 
 export default Home;
