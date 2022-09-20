@@ -10,15 +10,14 @@ function App() {
     useEffect(() => {
         const init = async () => {
             try {
+                const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID!;
+                const MUMBAI_RPC_URL = process.env.NEXT_PUBLIC_MUMBAI_RPC_URL!;
                 const web3auth = new Web3Auth({
-                    clientId:
-                        "BJAfJG-kdghk9Ty5fuBX4th_n76a9PzgEZ1QFHjImTTGKbnK_08Y5R9moAb9yqshtWKRV_jM0MPzmRL-VpxUl9w", // get it from Web3Auth Dashboard
+                    clientId: CLIENT_ID!,
                     chainConfig: {
                         chainNamespace: "eip155",
                         chainId: "0x13881", // hex of 80001, polygon testnet
-                        rpcTarget: process.env.MUMBAI_RPC_URL,
-                        // Avoid using public rpcTarget in production.
-                        // Use services like Infura, Quicknode etc
+                        rpcTarget: MUMBAI_RPC_URL!,
                         displayName: "Polygon Testnet",
                         blockExplorer: "https://mumbai.polygonscan.com/",
                         ticker: "MATIC",
