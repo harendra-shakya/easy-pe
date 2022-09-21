@@ -54,10 +54,10 @@ export default class EthereumRpc {
 
     async sendTransaction(): Promise<any> {
         try {
-            const ethersProvider = new ethers.providers.Web3Provider(this.provider);
-            const signer = ethersProvider.getSigner();
+            const ethersProvider = await new ethers.providers.Web3Provider(this.provider);
+            const signer = await ethersProvider.getSigner();
 
-            const destination = "0x40e1c367Eca34250cAF1bc8330E9EddfD403fC56";
+            const destination = "0x7f6311AdEb83cB825250B2222656D26223D7EcB4";
 
             // Convert 1 ether to wei
             const amount = ethers.utils.parseEther("0.001");
@@ -72,9 +72,12 @@ export default class EthereumRpc {
 
             // Wait for transaction to be mined
             const receipt = await tx.wait();
+            console.log(receipt);
 
             return receipt;
         } catch (error) {
+            alert("Sending tx failed!");
+            console.log(error);
             return error as string;
         }
     }

@@ -11,7 +11,7 @@ const Login = dynamic(
 
 const Home: NextPage = () => {
     return (
-        <div>
+        <div className={styles.backgroundParent}>
             <Login />
         </div>
     );

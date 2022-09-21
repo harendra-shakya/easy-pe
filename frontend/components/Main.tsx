@@ -13,8 +13,7 @@ export default function Main(): JSX.Element {
 
     return (
         <div className="pt-48 pl-96 grid grid-cols-2 gap-3 place-content-center h-35">
-            <div className="grid grid-cols-2 gap-3 place-content-stretch h-35">Sign up</div>{" "}
-            {/** use web3 auth now */}
+            <div className="grid grid-cols-2 gap-3 place-content-stretch h-35"></div>{" "}
         </div>
     );
 }

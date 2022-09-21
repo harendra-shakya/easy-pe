@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
+import { useMoralis } from "react-moralis";
 import { Web3Auth } from "@web3auth/web3auth";
-import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
+import { SafeEventEmitterProvider } from "@web3auth/base";
+import styles from "../styles/Home.module.css";
+import { ethers } from "ethers";
 import RPC from "./ethersRPC";
 
 function App() {
+    const { Moralis, user, authError, isAuthenticating, isAuthenticated } = useMoralis();
     const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
     const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null);
+
+    console.log("isAuthenticated", isAuthenticated);
+    console.log("isAuthenticating", isAuthenticating);
 
     useEffect(() => {
         const init = async () => {
@@ -13,7 +20,7 @@ function App() {
                 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID!;
                 const MUMBAI_RPC_URL = process.env.NEXT_PUBLIC_MUMBAI_RPC_URL!;
                 const web3auth = new Web3Auth({
-                    clientId: CLIENT_ID!,
+                    clientId: CLIENT_ID!, // get it from Web3Auth Dashboard
                     chainConfig: {
                         chainNamespace: "eip155",
                         chainId: "0x13881", // hex of 80001, polygon testnet
@@ -29,8 +36,11 @@ function App() {
 
                 await web3auth.initModal();
                 if (web3auth.provider) {
+                    console.log("provider", web3auth.provider);
                     setProvider(web3auth.provider);
                 }
+                // const web3authProvider = await web3auth.connect();
+                // setProvider(web3authProvider);
             } catch (error) {
                 console.error(error);
             }
@@ -40,6 +50,7 @@ function App() {
     }, []);
 
     const login = async () => {
+        console.log("logging in");
         if (!web3auth) {
             console.log("web3auth not initialized yet");
             return;
@@ -49,6 +60,8 @@ function App() {
     };
 
     const getUserInfo = async () => {
+        console.log("isAuthenticated", isAuthenticated);
+        console.log("isAuthenticating", isAuthenticating);
         if (!web3auth) {
             console.log("web3auth not initialized yet");
             return;
@@ -105,6 +118,21 @@ function App() {
         console.log(receipt);
     };
 
+    const transfer = async (_amount: string, _receiver: string) => {
+        try {
+            await Moralis.enableWeb3();
+            await Moralis.transfer({
+                amount: Moralis.Units.ETH(_amount),
+                receiver: _receiver,
+                type: "native",
+            }).then((e) => {
+                alert("sucesfully transfered");
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     const signMessage = async () => {
         if (!provider) {
             console.log("provider not initialized yet");
@@ -138,6 +166,12 @@ function App() {
             <button onClick={getBalance} className="card">
                 Get Balance
             </button>
+            <button
+                onClick={() => transfer("0.1", "0x7f6311AdEb83cB825250B2222656D26223D7EcB4")}
+                className="card"
+            >
+                Transfer
+            </button>
             <button onClick={sendTransaction} className="card">
                 Send Transaction
             </button>
@@ -158,22 +192,21 @@ function App() {
     );
 
     const unloggedInView = (
-        <button onClick={login} className="card">
-            Login
-        </button>
+        <div className={styles.card}>
+            <div>EasyPe</div>
+            {isAuthenticating && <p className={styles.green}>Authenticating</p>}
+            {authError && <p className={styles.error}>{JSON.stringify(authError.message)}</p>}
+            <div className={styles.buttonCard}>
+                <button className={styles.loginButton} onClick={login}>
+                    Login
+                </button>
+            </div>
+        </div>
     );
 
     return (
         <div className="container">
-            <h1 className="title">
-                <a target="_blank" href="http://web3auth.io/" rel="noreferrer">
-                    Web3Auth
-                </a>
-                & ReactJS Example
-            </h1>
-
             <div className="grid">{provider ? loggedInView : unloggedInView}</div>
-
         </div>
     );
 }
