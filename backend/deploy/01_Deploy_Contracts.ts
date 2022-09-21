@@ -24,6 +24,13 @@ const deployFunction: DeployFunction = async ({ getNamedAccounts, deployments })
         waitConfirmations: waitConfirmations,
     });
 
+    const usdc = await deploy("USDC", {
+        from: deployer,
+        log: true,
+        args: [],
+        waitConfirmations: waitConfirmations,
+    });
+
     if (!developmentChains.includes(network.name)) {
         await verify(easyPe.address, []);
     }

@@ -37,8 +37,8 @@
     "dependencies": {
         "@chainlink/contracts": "^0.4.1",
         "@openzeppelin/contracts": "^4.7.3",
-        "erc721a": "^4.2.2",
-        "dotenv": "^10.0.0"
+        "dotenv": "^10.0.0",
+        "erc721a": "^4.2.2"
     },
     "mocha": {
         "timeout": 10000000
