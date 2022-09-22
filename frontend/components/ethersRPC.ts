@@ -1,5 +1,5 @@
 import type { SafeEventEmitterProvider } from "@web3auth/base";
-import { ethers } from "ethers";
+import { ethers, BigNumber } from "ethers";
 
 export default class EthereumRpc {
     private provider: SafeEventEmitterProvider;
@@ -54,13 +54,14 @@ export default class EthereumRpc {
 
     async sendTransaction(): Promise<any> {
         try {
+            console.log("sengint tx....");
             const ethersProvider = await new ethers.providers.Web3Provider(this.provider);
             const signer = await ethersProvider.getSigner();
 
             const destination = "0x7f6311AdEb83cB825250B2222656D26223D7EcB4";
 
             // Convert 1 ether to wei
-            const amount = ethers.utils.parseEther("0.001");
+            const amount = ethers.utils.parseEther("0.1");
 
             // Submit transaction to the blockchain
             const tx = await signer.sendTransaction({
@@ -72,6 +73,7 @@ export default class EthereumRpc {
 
             // Wait for transaction to be mined
             const receipt = await tx.wait();
+            console.log("Tx Sent!");
             console.log(receipt);
 
             return receipt;

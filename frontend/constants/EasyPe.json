@@ -1,1 +1,1 @@
-[]
+[{"type":"function","name":"getAddress","constant":true,"stateMutability":"view","payable":false,"gas":29000000,"inputs":[{"type":"string","name":"emailHash"}],"outputs":[{"type":"address","name":"_address"}]},{"type":"function","name":"transferFrom","constant":false,"payable":false,"gas":29000000,"inputs":[{"type":"address","name":"_token"},{"type":"uint256","name":"_amount"},{"type":"address","name":"_to"}],"outputs":[]}]

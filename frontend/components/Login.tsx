@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import { Web3Auth } from "@web3auth/web3auth";
-import { SafeEventEmitterProvider } from "@web3auth/base";
+import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import styles from "../styles/Home.module.css";
-import { ethers } from "ethers";
+import Image from "next/image";
 import RPC from "./ethersRPC";
 
 function App() {
@@ -25,6 +25,8 @@ function App() {
                         chainNamespace: "eip155",
                         chainId: "0x13881", // hex of 80001, polygon testnet
                         rpcTarget: MUMBAI_RPC_URL!,
+                        // Avoid using public rpcTarget in production.
+                        // Use services like Infura, Quicknode etc
                         displayName: "Polygon Testnet",
                         blockExplorer: "https://mumbai.polygonscan.com/",
                         ticker: "MATIC",
@@ -39,8 +41,8 @@ function App() {
                     console.log("provider", web3auth.provider);
                     setProvider(web3auth.provider);
                 }
-                // const web3authProvider = await web3auth.connect();
-                // setProvider(web3authProvider);
+                const web3authProvider = await web3auth.connect();
+                setProvider(web3authProvider);
             } catch (error) {
                 console.error(error);
             }
@@ -118,21 +120,6 @@ function App() {
         console.log(receipt);
     };
 
-    const transfer = async (_amount: string, _receiver: string) => {
-        try {
-            await Moralis.enableWeb3();
-            await Moralis.transfer({
-                amount: Moralis.Units.ETH(_amount),
-                receiver: _receiver,
-                type: "native",
-            }).then((e) => {
-                alert("sucesfully transfered");
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    };
-
     const signMessage = async () => {
         if (!provider) {
             console.log("provider not initialized yet");
@@ -166,12 +153,6 @@ function App() {
             <button onClick={getBalance} className="card">
                 Get Balance
             </button>
-            <button
-                onClick={() => transfer("0.1", "0x7f6311AdEb83cB825250B2222656D26223D7EcB4")}
-                className="card"
-            >
-                Transfer
-            </button>
             <button onClick={sendTransaction} className="card">
                 Send Transaction
             </button>
@@ -193,7 +174,7 @@ function App() {
 
     const unloggedInView = (
         <div className={styles.card}>
-            <div>EasyPe</div>
+            <div>Login</div>
             {isAuthenticating && <p className={styles.green}>Authenticating</p>}
             {authError && <p className={styles.error}>{JSON.stringify(authError.message)}</p>}
             <div className={styles.buttonCard}>
