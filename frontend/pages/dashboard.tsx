@@ -20,15 +20,11 @@ export default function Dashboard() {
   async function setUp() {
     const _provider = await getProviders();
     const _web3auth = await getWeb3Auth();
-    console.log("providers", _web3auth);
-    setWeb3auth(_web3auth);
-    console.log("providers", _provider);
-    setProvider(_provider);
     const _balance = await getBalance();
-    console.log("balance", _balance);
-    setBalance(_balance);
     const _user = await getUserInfo();
-    console.log("userinfo", _user);
+    setWeb3auth(_web3auth);
+    setProvider(_provider);
+    setBalance(_balance);
     setUser(_user);
   }
 
