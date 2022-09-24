@@ -31,7 +31,7 @@ const deployFunction: DeployFunction = async ({ getNamedAccounts, deployments })
         waitConfirmations: waitConfirmations,
     });
 
-    if (!developmentChains.includes(network.name)) {
+    if (!developmentChains.includes(network.name) && process.env.POLYGONSCAN_API_KEY) {
         await verify(easyPe.address, []);
     }
 };
