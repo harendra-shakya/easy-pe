@@ -4,6 +4,10 @@ import { SafeEventEmitterProvider } from "@web3auth/base";
 import styles from "../styles/Home.module.css";
 import Router from "next/router";
 import { Helper } from "../components/Helper";
+import { ethers, Contract } from "ethers";
+import easyPeAbi from "../constants/EasyPe.json";
+import contractAddresses from "../constants/networkMapping.json";
+import RPC from "../utils/ethersRPC";
 
 function Login() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
@@ -84,10 +88,79 @@ function Login() {
     </div>
   );
 
-  useEffect(() => {
-    if (isAuthenticated === true) {
-      Router.push("/dashboard");
+  const getUserInfo = async () => {
+    try {
+      if (!web3auth) {
+        console.log("web3auth not initialized yet");
+        return;
+      }
+      const user = await web3auth.getUserInfo();
+      console.log(user);
+      return user;
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from getUser Info");
     }
+  };
+
+  const getAddress = async () => {
+    try {
+      if (!provider) {
+        console.log("provider not initialized yet");
+        return;
+      }
+      const rpc = new RPC(provider);
+      const address = await rpc.getAccounts();
+      console.log(address);
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from getAccounts");
+    }
+  };
+  const redirect = async () => {
+    const ethersProvider = await new ethers.providers.Web3Provider(provider);
+    const signer = await ethersProvider.getSigner();
+
+    const contractAddress: string = await contractAddresses["80001"][
+      "EasyPe"
+    ][0];
+    const contract: Contract = await new ethers.Contract(
+      contractAddress,
+      easyPeAbi,
+      signer
+    );
+
+    const email = (await getUserInfo())?.email;
+    const emailHash = await ethers.utils.keccak256(
+      ethers.utils.toUtf8Bytes(email)
+    );
+    console.log("email", email);
+    console.log("hash", emailHash);
+
+    const isEmailRegistered = await contract.isEmailRegistered(emailHash);
+
+    console.log("isEmailRegistered", isEmailRegistered);
+
+    if (!isEmailRegistered) {
+      console.log("Not registered, registering email....");
+
+      const userAddress = await getAddress();
+
+      console.log("address", userAddress);
+      await contract.register(emailHash);
+    } else {
+      console.log("User Already Registered!");
+    }
+    const get = await contract.getAddress(emailHash);
+    console.log("got this address", get);
+    console.log("contractAddress", contractAddress);
+    console.log("contract", contract);
+
+    Router.push("/dashboard");
+  };
+
+  useEffect(() => {
+    if (isAuthenticated === true) redirect();
   }, [isAuthenticated]);
 
   return (
