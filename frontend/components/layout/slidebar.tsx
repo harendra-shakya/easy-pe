@@ -86,26 +86,19 @@ export default function Sidebar() {
                     href="#pablo"
                     className={
                       "block py-3 text-xs font-bold uppercase " +
-                      (router.pathname.indexOf("/admin/dashboard") !== -1
+                      (router.pathname.indexOf("/dashboard") !== -1
                         ? "text-lightBlue-500 hover:text-lightBlue-600"
                         : "text-blueGray-700 hover:text-blueGray-500")
                     }
                   >
-                    <i
-                      className={
-                        "fas fa-tv mr-2 text-sm " +
-                        (router.pathname.indexOf("/admin/dashboard") !== -1
-                          ? "opacity-75"
-                          : "text-blueGray-300")
-                      }
-                    ></i>{" "}
+                    <i className="fas fa-tv text-blueGray-300 mr-2 text-sm"></i>{" "}
                     Dashboard
                   </a>
                 </Link>
               </li>
 
               <li className="items-center">
-                <Link href="/dashboard">
+                <Link href="/pay">
                   <a
                     href="#pablo"
                     className="text-blueGray-700 hover:text-blueGray-500 block py-3 text-xs font-bold uppercase"
@@ -117,7 +110,7 @@ export default function Sidebar() {
               </li>
 
               <li className="items-center">
-                <Link href="/dashboard">
+                <Link href="/invest">
                   <a
                     href="#pablo"
                     className="text-blueGray-700 hover:text-blueGray-500 block py-3 text-xs font-bold uppercase"
@@ -163,7 +156,7 @@ export default function Sidebar() {
 
             <ul className="flex list-none flex-col md:mb-4 md:min-w-full md:flex-col">
               <li className="items-center">
-                <Link href="">
+                <Link href="/">
                   <a
                     href="#pablo"
                     className="text-blueGray-700 hover:text-blueGray-500 block py-3 text-xs font-bold uppercase"

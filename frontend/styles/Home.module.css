@@ -10,7 +10,12 @@
   height: 100vh;
   display: grid;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
+  background-image: url("/img/bg-header.jpg");
+}
+
+.bgImg {
+  height: 100vh;
   background-image: url("/img/bg-header.jpg");
 }
 
