@@ -68,82 +68,122 @@ export default function Testing() {
   };
 
   const getUserInfo = async () => {
-    console.log("isAuthenticated", isAuthenticated);
-    console.log("isAuthenticating", isAuthenticating);
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
-      return;
+    try {
+      if (!web3auth) {
+        console.log("web3auth not initialized yet");
+        return;
+      }
+      const user = await web3auth.getUserInfo();
+      console.log(user);
+      return user;
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from getUser Info");
     }
-    const user = await web3auth.getUserInfo();
-    console.log(user);
   };
 
   const logout = async () => {
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
-      return;
+    try {
+      if (!web3auth) {
+        console.log("web3auth not initialized yet");
+        return;
+      }
+      await web3auth.logout();
+      setProvider(null);
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from logout");
     }
-    await web3auth.logout();
-    setProvider(null);
   };
 
   const getChainId = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
+    try {
+    } catch (e) {
+      if (!provider) {
+        console.log("provider not initialized yet");
+        return;
+      }
+      const rpc = new RPC(provider);
+      const chainId = await rpc.getChainId();
+      console.log(chainId);
+      console.log(e);
+      console.log("This error is coming from chainID");
     }
-    const rpc = new RPC(provider);
-    const chainId = await rpc.getChainId();
-    console.log(chainId);
   };
   const getAccounts = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
+    try {
+      if (!provider) {
+        console.log("provider not initialized yet");
+        return;
+      }
+      const rpc = new RPC(provider);
+      const address = await rpc.getAccounts();
+      console.log(address);
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from getAccounts");
     }
-    const rpc = new RPC(provider);
-    const address = await rpc.getAccounts();
-    console.log(address);
   };
 
   const getBalance = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
+    try {
+      if (!provider) {
+        console.log("provider not initialized yet");
+        return;
+      }
+      const rpc = new RPC(provider);
+      const balance = await rpc.getBalance();
+      console.log(balance);
+      return balance;
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from getBalance");
     }
-    const rpc = new RPC(provider);
-    const balance = await rpc.getBalance();
-    console.log(balance);
   };
 
-  const sendTransaction = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
+  const sendTransaction = async (_to: string, _amount: string) => {
+    try {
+      if (!provider) {
+        console.log("provider not initialized yet");
+        return;
+      }
+      const rpc = new RPC(provider);
+      const receipt = await rpc.sendTransaction(_to, _amount);
+      console.log(receipt);
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from sendTransaction");
     }
-    const rpc = new RPC(provider);
-    const receipt = await rpc.sendTransaction();
-    console.log(receipt);
   };
 
-  const signMessage = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
+  const signMessage = async (message: string) => {
+    try {
+      if (!provider) {
+        console.log("provider not initialized yet");
+        return;
+      }
+      const rpc = new RPC(provider);
+      const signedMessage = await rpc.signMessage(message);
+      console.log(signedMessage);
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from signMessage");
     }
-    const rpc = new RPC(provider);
-    const signedMessage = await rpc.signMessage();
-    console.log(signedMessage);
   };
 
   const getPrivateKey = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
+    try {
+      if (!provider) {
+        console.log("provider not initialized yet");
+        return;
+      }
+      const rpc = new RPC(provider);
+      const privateKey = await rpc.getPrivateKey();
+      console.log(privateKey);
+    } catch (e) {
+      console.log(e);
+      console.log("This error is coming from getPrivateKey");
     }
-    const rpc = new RPC(provider);
-    const privateKey = await rpc.getPrivateKey();
-    console.log(privateKey);
   };
 
   return (
@@ -160,10 +200,15 @@ export default function Testing() {
       <button onClick={getBalance} className="card">
         Get Balance
       </button>
-      <button onClick={sendTransaction} className="card">
+      <button
+        onClick={() => {
+          sendTransaction("address", "amount");
+        }}
+        className="card"
+      >
         Send Transaction
       </button>
-      <button onClick={signMessage} className="card">
+      <button onClick={() => signMessage("message")} className="card">
         Sign Message
       </button>
       <button onClick={getPrivateKey} className="card">
