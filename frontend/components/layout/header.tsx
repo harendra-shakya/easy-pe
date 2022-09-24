@@ -1,11 +1,5 @@
-import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Web3Auth } from "@web3auth/web3auth";
-import { SafeEventEmitterProvider } from "@web3auth/base";
-import RPC from "../../utils/ethersRPC";
-import Login from "../../utils/testing";
 import Link from "next/link";
-import styles from "../../styles/Home.module.css";
 
 import { Typography, Button } from "@material-tailwind/react";
 
