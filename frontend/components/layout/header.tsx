@@ -37,7 +37,7 @@ export default function Header() {
                 </Link>
               </div>
             </div>
-            <div className="static w-full max-w-full px-4 pl-40 pt-24 md:w-7/12 md:pt-0 lg:block">
+            <div className="hidden w-full max-w-full px-4 pl-40 pt-24 md:w-7/12 md:pt-0 lg:block">
               <Image
                 src="/img/international.png"
                 alt="components"
