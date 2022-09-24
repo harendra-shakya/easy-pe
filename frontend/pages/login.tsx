@@ -3,6 +3,7 @@ import { Web3Auth } from "@web3auth/web3auth";
 import { SafeEventEmitterProvider } from "@web3auth/base";
 import styles from "../styles/Home.module.css";
 import Router from "next/router";
+import { Helper } from "../components/Helper";
 
 function Login() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
@@ -93,7 +94,7 @@ function Login() {
     <div className="container">
       <div className="grid">
         {provider ? (
-          <></>
+          <Helper _provider={provider} _web3auth={web3auth} />
         ) : (
           <div className={styles.backgroundParent}>{unloggedInView}</div>
         )}
