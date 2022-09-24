@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
 import { Web3Auth } from "@web3auth/web3auth";
-import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
-import styles from "../styles/Home.module.css";
-import RPC from "../utils/ethersRPC";
-import Main from "./Main";
+import { SafeEventEmitterProvider } from "@web3auth/base";
+import RPC from "./ethersRPC";
 
-function App() {
+export default function Testing() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
     null
@@ -15,22 +12,18 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState("");
 
-  console.log("isAuthenticated", isAuthenticated);
-  console.log("isAuthenticating", isAuthenticating);
-
   useEffect(() => {
     const init = async () => {
       try {
         const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID!;
         const MUMBAI_RPC_URL = process.env.NEXT_PUBLIC_MUMBAI_RPC_URL!;
+
         const web3auth = new Web3Auth({
           clientId: CLIENT_ID!, // get it from Web3Auth Dashboard
           chainConfig: {
             chainNamespace: "eip155",
             chainId: "0x13881", // hex of 80001, polygon testnet
             rpcTarget: MUMBAI_RPC_URL!,
-            // Avoid using public rpcTarget in production.
-            // Use services like Infura, Quicknode etc
             displayName: "Polygon Testnet",
             blockExplorer: "https://mumbai.polygonscan.com/",
             ticker: "MATIC",
@@ -48,6 +41,7 @@ function App() {
         const web3authProvider = await web3auth.connect();
         setProvider(web3authProvider);
       } catch (error) {
+        setAuthError(error.toString());
         console.error(error);
       }
     };
@@ -56,13 +50,21 @@ function App() {
   }, []);
 
   const login = async () => {
-    console.log("logging in");
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
-      return;
+    try {
+      setIsAuthenticating(true);
+      console.log("logging in");
+      if (!web3auth) {
+        console.log("web3auth not initialized yet");
+        return;
+      }
+      const web3authProvider = await web3auth.connect();
+      setProvider(web3authProvider);
+      setIsAuthenticated(true);
+    } catch (e) {
+      setAuthError(e.toString());
+      console.log(e);
     }
-    const web3authProvider = await web3auth.connect();
-    setProvider(web3authProvider);
+    setIsAuthenticating(false);
   };
 
   const getUserInfo = async () => {
@@ -144,24 +146,35 @@ function App() {
     console.log(privateKey);
   };
 
-  const unloggedInView = (
-    <div className={styles.card}>
-      <div>Login</div>
-      {isAuthenticating && <p className={styles.green}>Authenticating</p>}
-      {authError && <p className={styles.error}>{JSON.stringify(authError)}</p>}
-      <div className={styles.buttonCard}>
-        <button className={styles.loginButton} onClick={login}>
-          Login
-        </button>
-      </div>
-    </div>
-  );
-
   return (
-    <div className="container">
-      <div className="grid">{provider ? <Main /> : unloggedInView}</div>
-    </div>
+    <>
+      <button onClick={getUserInfo} className="card">
+        Get User Info
+      </button>
+      <button onClick={getChainId} className="card">
+        Get Chain ID
+      </button>
+      <button onClick={getAccounts} className="card">
+        Get Accounts
+      </button>
+      <button onClick={getBalance} className="card">
+        Get Balance
+      </button>
+      <button onClick={sendTransaction} className="card">
+        Send Transaction
+      </button>
+      <button onClick={signMessage} className="card">
+        Sign Message
+      </button>
+      <button onClick={getPrivateKey} className="card">
+        Get Private Key
+      </button>
+      <button onClick={logout} className="card">
+        Log Out
+      </button>
+      <div id="console" style={{ whiteSpace: "pre-line" }}>
+        <p style={{ whiteSpace: "pre-line" }}></p>
+      </div>
+    </>
   );
 }
-
-export default App;

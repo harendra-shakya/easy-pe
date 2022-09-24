@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
-
 import Image from "next/image";
+import { Web3Auth } from "@web3auth/web3auth";
+import { SafeEventEmitterProvider } from "@web3auth/base";
+import RPC from "../../utils/ethersRPC";
+import Login from "../../utils/testing";
 import Link from "next/link";
+import styles from "../../styles/Home.module.css";
 
-import {
-  Tabs,
-  TabsHeader,
-  Tab,
-  Typography,
-  Button,
-  Tooltip,
-} from "@material-tailwind/react";
+import { Typography, Button } from "@material-tailwind/react";
 
 export default function Header() {
   return (
@@ -31,12 +28,7 @@ export default function Header() {
                 email address only.
               </Typography>
               <div className="flex flex-col-reverse gap-2 lg:flex-row">
-                <Link
-                  href={
-                    ""
-                    // login
-                  }
-                >
+                <Link href="/login">
                   <a>
                     <Button variant="gradient" className="h-full w-full">
                       Login
@@ -45,7 +37,7 @@ export default function Header() {
                 </Link>
               </div>
             </div>
-            <div className="hidden w-full max-w-full px-4 pl-40 pt-24 md:w-7/12 md:pt-0 lg:block">
+            <div className="static w-full max-w-full px-4 pl-40 pt-24 md:w-7/12 md:pt-0 lg:block">
               <Image
                 src="/img/international.png"
                 alt="components"

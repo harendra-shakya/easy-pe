@@ -80,17 +80,11 @@ export default function Navbar({
         placement="bottom"
         offset={-2.5}
       >
-        <li>
-          <a
-            className={navbarItemClasses}
-            href="https://github.com/harendra-shakya"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <i className="fas fa-fingerprint mr-2 text-base opacity-60"></i>
-            <span>Login</span>
+        <Link href="/login">
+          <a className="fas fa-fingerprint mr-2 py-3 text-base opacity-70">
+            Login
           </a>
-        </li>
+        </Link>
       </Tooltip>
     </ul>
   );
