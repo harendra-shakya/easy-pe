@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
 import { SafeEventEmitterProvider } from "@web3auth/base";
 import styles from "../styles/Home.module.css";
-import Main from "../components/Main";
+import Router from "next/router";
 
 function Login() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
@@ -83,11 +83,17 @@ function Login() {
     </div>
   );
 
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      Router.push("/dashboard");
+    }
+  }, [isAuthenticated]);
+
   return (
     <div className="container">
       <div className="grid">
         {provider ? (
-          <Main />
+          <></>
         ) : (
           <div className={styles.backgroundParent}>{unloggedInView}</div>
         )}
