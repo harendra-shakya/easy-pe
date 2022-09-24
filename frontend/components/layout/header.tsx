@@ -24,10 +24,11 @@ export default function Header() {
                 variant="h1"
                 className="mb-2 font-black tracking-normal text-[#1A237E]"
               >
-                EasyPe
+                EasyPe - The PayPal for crypto
               </Typography>
               <Typography className="mb-6 text-lg font-light text-[#1A237E] lg:pr-12">
-                Send and receive payments internationally in seconds.
+                Send and receive payments internationally in seconds with your
+                email address only.
               </Typography>
               <div className="flex flex-col-reverse gap-2 lg:flex-row">
                 <Link
