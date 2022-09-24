@@ -9,10 +9,22 @@ contract EasyPe {
     bytes4 private constant TF_SELECTOR =
         bytes4(keccak256(bytes("transferFrom(address,address,uint256)")));
 
-    mapping(string => address) addresses;
+    mapping(bytes32 => address) private addresses; // email hash -> address
+    mapping(address => bytes32) private hashes;
 
-    function getAddress(string calldata emailHash) external view returns (address _address) {
+    function getAddress(bytes32 emailHash) external view returns (address _address) {
         _address = addresses[emailHash];
+    }
+
+    function isEmailRegistered(bytes32 emailHash) external view returns (bool exists) {
+        if(addresses[emailHash] == address(0)) exists = false;
+        else exists = true;
+    }
+
+    function register(bytes32 emailHash) external {
+        require(addresses[emailHash] == address(0), "Already Registered"); // one check is enough
+        addresses[emailHash] = msg.sender;
+        hashes[msg.sender] = emailHash;
     }
 
     function _safeTranfer(
