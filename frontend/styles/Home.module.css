@@ -6,9 +6,41 @@
   background-image: url("/img/bg-header.jpg");
 }
 
+.backgroundParent2 {
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  background-image: url("/img/bg-header.jpg");
+}
+
 .card {
   width: 200px;
   height: 160px;
+  background-color: white;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.bigCard {
+  width: 230px;
+  height: 180px;
+  background-color: white;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.bigCard2 {
+  width: 230px;
+  height: 180px;
   background-color: white;
   border-radius: 20px;
   display: flex;
