@@ -8,7 +8,6 @@ import RPC from "../utils/ethersRPC";
 import { Web3Auth } from "@web3auth/web3auth";
 import { getProviders, getWeb3Auth } from "components/Helper";
 import { SafeEventEmitterProvider } from "@web3auth/base";
-import { ethers } from "ethers";
 
 export default function Dashboard() {
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
@@ -20,11 +19,11 @@ export default function Dashboard() {
 
   async function setUp() {
     const _provider = await getProviders();
-    console.log("providers", _provider);
-    setProvider(_provider);
     const _web3auth = await getWeb3Auth();
     console.log("providers", _web3auth);
     setWeb3auth(_web3auth);
+    console.log("providers", _provider);
+    setProvider(_provider);
     const _balance = await getBalance();
     console.log("balance", _balance);
     setBalance(_balance);
@@ -35,7 +34,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     setUp();
-  }, []);
+  }, [web3auth, provider, user, balance]);
 
   const getUserInfo = async () => {
     try {
@@ -49,49 +48,6 @@ export default function Dashboard() {
     } catch (e) {
       console.log(e);
       console.log("This error is coming from getUser Info");
-    }
-  };
-
-  const logout = async () => {
-    try {
-      if (!web3auth) {
-        console.log("web3auth not initialized yet");
-        return;
-      }
-      await web3auth.logout();
-      setProvider(null);
-    } catch (e) {
-      console.log(e);
-      console.log("This error is coming from logout");
-    }
-  };
-
-  const getChainId = async () => {
-    try {
-    } catch (e) {
-      if (!provider) {
-        console.log("provider not initialized yet");
-        return;
-      }
-      const rpc = new RPC(provider);
-      const chainId = await rpc.getChainId();
-      console.log(chainId);
-      console.log(e);
-      console.log("This error is coming from chainID");
-    }
-  };
-  const getAccounts = async () => {
-    try {
-      if (!provider) {
-        console.log("provider not initialized yet");
-        return;
-      }
-      const rpc = new RPC(provider);
-      const address = await rpc.getAccounts();
-      console.log(address);
-    } catch (e) {
-      console.log(e);
-      console.log("This error is coming from getAccounts");
     }
   };
 
@@ -111,64 +67,17 @@ export default function Dashboard() {
     }
   };
 
-  const sendTransaction = async () => {
-    try {
-      if (!provider) {
-        console.log("provider not initialized yet");
-        return;
-      }
-      const rpc = new RPC(provider);
-      const receipt = await rpc.sendTransaction();
-      console.log(receipt);
-    } catch (e) {
-      console.log(e);
-      console.log("This error is coming from sendTransaction");
-    }
-  };
-
-  const signMessage = async () => {
-    try {
-      if (!provider) {
-        console.log("provider not initialized yet");
-        return;
-      }
-      const rpc = new RPC(provider);
-      const signedMessage = await rpc.signMessage();
-      console.log(signedMessage);
-    } catch (e) {
-      console.log(e);
-      console.log("This error is coming from signMessage");
-    }
-  };
-
-  const getPrivateKey = async () => {
-    try {
-      if (!provider) {
-        console.log("provider not initialized yet");
-        return;
-      }
-      const rpc = new RPC(provider);
-      const privateKey = await rpc.getPrivateKey();
-      console.log(privateKey);
-    } catch (e) {
-      console.log(e);
-      console.log("This error is coming from getPrivateKey");
-    }
-  };
-
   return (
     <>
       <Sidebar />
       <div className="bg-blueGray-600 relative md:ml-64">
         <Navbar />
-        {/* make a header if possible */}
-        {/* <Header /> */}
         <div className={`${styles.backgroundParent}`}>
           <div className={`shadow-2xl ${styles.bigCard}`}>
             {" "}
-            Hey, {user.name}
+            Hey, {user?.name}
             <p className="py-2">
-              You are logged in with {user.email}. You can use it for sending
+              You are logged in with {user?.email}. You can use it for sending
               and receiving payments.
             </p>
           </div>
@@ -177,7 +86,7 @@ export default function Dashboard() {
             <div className={styles.buttonCard}>
               Balances:
               <p className="py-2">
-                Your MATIC Balance: {(+balance).toFixed(2)}
+                Your MATIC Balance: {(+balance)?.toFixed(2)}
               </p>
               <p>Your USDC Balance: 0</p>
             </div>
