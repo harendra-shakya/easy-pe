@@ -12,6 +12,8 @@ contract EasyPe {
     mapping(bytes32 => address) private addresses; // email hash -> address
     mapping(address => bytes32) private hashes;
 
+    event Registered(bytes32 emailHash, address user);
+
     function getAddress(bytes32 emailHash) external view returns (address _address) {
         _address = addresses[emailHash];
     }
@@ -25,6 +27,7 @@ contract EasyPe {
         require(addresses[emailHash] == address(0), "Already Registered"); // one check is enough
         addresses[emailHash] = msg.sender;
         hashes[msg.sender] = emailHash;
+        emit Registered(emailHash, msg.sender);
     }
 
     function _safeTranfer(
