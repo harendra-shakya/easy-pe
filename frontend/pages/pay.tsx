@@ -62,7 +62,7 @@ export default function Pay() {
     try {
       console.log("making invoices...");
       const token = process.env.NEXT_PUBLIC_API_TOKEN;
-      console.log("api token", token);
+      // console.log("api token", token);
       const client = new Web3Storage({ token });
 
       if (!web3auth) {
@@ -117,16 +117,17 @@ export default function Pay() {
 
       const isEmailRegistered = await contract.isEmailRegistered(emailHash);
 
-      if (!isEmailRegistered) {
-        console.log("Not registered, registering email....");
-        await contract.register(emailHash);
-      }
-
       const get = await contract.getAddress(emailHash);
       console.log("got this address", get);
       console.log("contractAddress", contractAddress);
       console.log("contract", contract);
 
+      if (!isEmailRegistered) {
+        console.log("Not registered, registering email....");
+        await contract.register(emailHash);
+      }
+
+      
       const toEmailHash = await ethers.utils.keccak256(
         ethers.utils.toUtf8Bytes(toEmail)
       );

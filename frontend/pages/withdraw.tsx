@@ -58,7 +58,7 @@ export default function Pay() {
     try {
       console.log("making invoices...");
       const token = process.env.NEXT_PUBLIC_API_TOKEN;
-      console.log("api token", token);
+      // console.log("api token", token);
       const client = new Web3Storage({ token });
 
       if (!web3auth) {
