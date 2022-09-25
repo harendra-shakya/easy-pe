@@ -1,17 +1,14 @@
-import { Input } from "@material-tailwind/react";
-import Link from "next/link";
-
+import { ethers, Contract } from "ethers";
+import easyPeAbi from "../constants/EasyPe.json";
+import contractAddresses from "../constants/networkMapping.json";
 import React, { useEffect, useState } from "react";
-
 import Navbar from "../components/layout/dashboard-navbar";
 import Sidebar from "../components/layout/slidebar";
 import styles from "../styles/Home.module.css";
-
 import RPC from "../utils/ethersRPC";
 import { Web3Auth } from "@web3auth/web3auth";
 import { getProviders, getWeb3Auth } from "components/Helper";
 import { SafeEventEmitterProvider } from "@web3auth/base";
-import { ethers } from "ethers";
 
 export default function Pay() {
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
@@ -19,37 +16,30 @@ export default function Pay() {
   );
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [balance, setBalance] = useState("0");
-  const [user, setUser] = useState<any>();
+  const [amount, setAmount] = useState("");
+  const [toEmail, setToEmail] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [info, setInfo] = useState("");
 
   async function setUp() {
     const _provider = await getProviders();
     const _web3auth = await getWeb3Auth();
-    const _balance = await getBalance();
-    const _user = await getUserInfo();
     setWeb3auth(_web3auth);
     setProvider(_provider);
+  }
+
+  async function updateUI() {
+    const _balance = await getBalance();
     setBalance(_balance);
-    setUser(_user);
   }
 
   useEffect(() => {
-    setUp();
-  }, [web3auth, provider, user, balance]);
+    updateUI();
+  }, [web3auth, provider, balance]);
 
-  const getUserInfo = async () => {
-    try {
-      if (!web3auth) {
-        console.log("web3auth not initialized yet");
-        return;
-      }
-      const user = await web3auth.getUserInfo();
-      console.log(user);
-      return user;
-    } catch (e) {
-      console.log(e);
-      console.log("This error is coming from getUser Info");
-    }
-  };
+  useEffect(() => {
+    setUp();
+  }, [web3auth, provider]);
 
   const getBalance = async () => {
     try {
@@ -67,18 +57,48 @@ export default function Pay() {
     }
   };
 
-  const sendTransaction = async (_to: string, _amount: string) => {
+  const handleSend = async () => {
     try {
-      if (!provider) {
-        console.log("provider not initialized yet");
-        return;
+      setIsDisabled(true);
+      setInfo("");
+      const ethersProvider = await new ethers.providers.Web3Provider(provider);
+      const signer = await ethersProvider.getSigner();
+
+      const contractAddress: string = await contractAddresses["80001"][
+        "EasyPe"
+      ][0];
+      const contract: Contract = await new ethers.Contract(
+        contractAddress,
+        easyPeAbi,
+        signer
+      );
+
+      const emailHash = await ethers.utils.keccak256(
+        ethers.utils.toUtf8Bytes(toEmail)
+      );
+
+      const isEmailRegistered = await contract.isEmailRegistered(emailHash);
+      const toAddress = await contract.getAddress(emailHash);
+
+      if (isEmailRegistered) {
+        console.log("Sending Tx......");
+        if (!provider) {
+          console.log("provider not initialized yet");
+          return;
+        }
+        const rpc = await new RPC(provider);
+        const receipt = await rpc.sendTransaction(toAddress, amount);
+        console.log(receipt);
+        alert("Tx sent successfully!");
+      } else {
+        setInfo("No user found with this email address.");
       }
-      const rpc = new RPC(provider);
-      const receipt = await rpc.sendTransaction(_to, _amount);
-      console.log(receipt);
+
+      setIsDisabled(false);
     } catch (e) {
       console.log(e);
-      console.log("This error is coming from sendTransaction");
+      alert("Tx failed for some reasone. Pleas try agains :/");
+      setIsDisabled(false);
     }
   };
 
@@ -101,6 +121,9 @@ export default function Pay() {
                         type="email"
                         className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm transition-all duration-150 ease-linear focus:outline-none focus:ring"
                         placeholder="Email"
+                        onChange={(e) => {
+                          setToEmail(e.target.value);
+                        }}
                       />
                     </div>
 
@@ -112,21 +135,27 @@ export default function Pay() {
                         type="Amount"
                         className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm shadow transition-all duration-150 ease-linear focus:outline-none focus:ring"
                         placeholder="Amount"
+                        onChange={(e) => {
+                          setAmount(e.target.value);
+                        }}
                       />
                     </div>
+                    <div>{info}</div>
                     <button
                       className="mr-1 mb-1 w-full rounded bg-blue-600 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-blue-600"
                       type="button"
-                      onChange={() => {}}
-                      // disabled={true}
+                      onClick={handleSend}
+                      disabled={isDisabled}
                     >
-                      Send
+                      {isDisabled ? "Sending...." : "Send"}
                     </button>
                   </form>
                 </div>
               </div>
               <div className="relative mt-6 flex flex-wrap">
-                <div className="w-1/2">Your Balance: </div>
+                <div className="w-1/2">
+                  Your Balance: {(+balance).toFixed(2)} MATIC
+                </div>
                 {/* <div className="w-1/2 text-right">Balance</div> */}
               </div>
             </div>
