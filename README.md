@@ -1,4 +1,4 @@
-Building a crypto payment processing app for web2 merchants
+Deployed on Polygon testnet [Live Server](https://easy-pe.vercel.app/)
 
 # Goal of this project
 
