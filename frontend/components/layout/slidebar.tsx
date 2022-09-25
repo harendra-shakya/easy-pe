@@ -150,19 +150,19 @@ export default function Sidebar() {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <h6 className="text-blueGray-500 block pt-1 pb-4 text-xs font-bold uppercase no-underline md:min-w-full">
-              Profile
+              Business
             </h6>
             {/* Navigation */}
 
             <ul className="flex list-none flex-col md:mb-4 md:min-w-full md:flex-col">
               <li className="items-center">
-                <Link href="/">
+                <Link href="/payment-button">
                   <a
                     href="#pablo"
                     className="text-blueGray-700 hover:text-blueGray-500 block py-3 text-xs font-bold uppercase"
                   >
                     <i className="fas fa-user text-blueGray-400 mr-2 text-sm"></i>{" "}
-                    Profile
+                    Payment Button
                   </a>
                 </Link>
               </li>
