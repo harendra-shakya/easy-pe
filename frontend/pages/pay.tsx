@@ -100,6 +100,8 @@ export default function Pay() {
       setInfo("");
       const ethersProvider = await new ethers.providers.Web3Provider(provider);
       const signer = await ethersProvider.getSigner();
+      const address = await signer.getAddress();
+      console.log("User address", address);
 
       const contractAddress: string = await contractAddresses["80001"][
         "EasyPe"
@@ -119,15 +121,14 @@ export default function Pay() {
 
       const get = await contract.getAddress(emailHash);
       console.log("got this address", get);
-      console.log("contractAddress", contractAddress);
-      console.log("contract", contract);
+      // console.log("contractAddress", contractAddress);
+      // console.log("contract", contract);
 
       if (!isEmailRegistered) {
         console.log("Not registered, registering email....");
         await contract.register(emailHash);
       }
 
-      
       const toEmailHash = await ethers.utils.keccak256(
         ethers.utils.toUtf8Bytes(toEmail)
       );
