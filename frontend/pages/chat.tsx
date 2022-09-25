@@ -16,7 +16,7 @@ export default function Chat() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [balance, setBalance] = useState("0");
   const [user, setUser] = useState<any>();
-  const [signer, setSigner] = useState();
+  const [signer, setSigner] = useState<any>();
 
   async function setUp() {
     const _provider = await getProviders();
@@ -66,21 +66,6 @@ export default function Chat() {
     } catch (e) {
       console.log(e);
       console.log("This error is coming from getBalance");
-    }
-  };
-
-  const sendTransaction = async (_to: string, _amount: string) => {
-    try {
-      if (!provider) {
-        console.log("provider not initialized yet");
-        return;
-      }
-      const rpc = new RPC(provider);
-      const receipt = await rpc.sendTransaction(_to, _amount);
-      console.log(receipt);
-    } catch (e) {
-      console.log(e);
-      console.log("This error is coming from sendTransaction");
     }
   };
 

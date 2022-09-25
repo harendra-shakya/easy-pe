@@ -96,7 +96,11 @@ export default function Navbar({
           <a
             className="fa fa-sign-out mr-2 py-3 text-base opacity-70"
             onClick={async () => {
-              await web3auth.logout();
+              try {
+                await web3auth.logout();
+              } catch (e) {
+                console.log(e);
+              }
             }}
           >
             Sign Out

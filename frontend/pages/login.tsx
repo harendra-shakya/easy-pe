@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
 import { SafeEventEmitterProvider } from "@web3auth/base";
-import styles from "../styles/Home.module.css";
-import Router from "next/router";
 import { Helper } from "../components/Helper";
 import { ethers, Contract } from "ethers";
+import styles from "../styles/Home.module.css";
+import Router from "next/router";
 import easyPeAbi from "../constants/EasyPe.json";
 import contractAddresses from "../constants/networkMapping.json";
 import RPC from "../utils/ethersRPC";
@@ -24,7 +24,7 @@ function Login() {
         const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID!;
         const MUMBAI_RPC_URL = process.env.NEXT_PUBLIC_MUMBAI_RPC_URL!;
         const web3auth = new Web3Auth({
-          clientId: CLIENT_ID!, // get it from Web3Auth Dashboard
+          clientId: CLIENT_ID!,
           chainConfig: {
             chainNamespace: "eip155",
             chainId: "0x13881", // hex of 80001, polygon testnet

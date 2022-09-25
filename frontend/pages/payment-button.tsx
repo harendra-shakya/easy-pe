@@ -1,14 +1,10 @@
-import { ethers, Contract } from "ethers";
-import easyPeAbi from "../constants/EasyPe.json";
-import contractAddresses from "../constants/networkMapping.json";
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/layout/dashboard-navbar";
-import Sidebar from "../components/layout/slidebar";
-import styles from "../styles/Home.module.css";
-import RPC from "../utils/ethersRPC";
 import { Web3Auth } from "@web3auth/web3auth";
 import { getProviders, getWeb3Auth } from "components/Helper";
 import { SafeEventEmitterProvider } from "@web3auth/base";
+import Navbar from "../components/layout/dashboard-navbar";
+import Sidebar from "../components/layout/slidebar";
+import styles from "../styles/Home.module.css";
 import Editor from "react-simple-code-editor";
 
 // prism.js
@@ -23,10 +19,7 @@ export default function PaymentBtn() {
     null
   );
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
-  const [balance, setBalance] = useState("0");
-  const [user, setUser] = useState<any>();
   const [isDisabled, setIsDisabled] = useState(false);
-  const [info, setInfo] = useState("");
   const [code, setCode] = useState("");
 
   async function setUp() {
@@ -51,17 +44,18 @@ export default function PaymentBtn() {
       setCode(`
       import { easype } from "easype";
 
-      const email = ${user.email}
+      const email = "${user.email}";
+      const tokenName = "USDC" // replace this with any token;
+      const amount = "10"; // use your input
 
       <button
         className="mr-1 mb-1 w-full rounded bg-blue-600 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-blue-600"
         type="button"
         onClick={() => {
-          easype.sendPayment(email, amount)
+          easype.sendPayment(email, amount, tokenName)
         }}
       >
       </button>`);
-      setInfo("Note: This is just for demo currently");
       setIsDisabled(false);
     } catch (e) {
       console.log(e);
@@ -108,7 +102,6 @@ export default function PaymentBtn() {
                   />
                 </div>
               </div>
-              <div>{info}</div>
             </div>
           </div>
         </div>

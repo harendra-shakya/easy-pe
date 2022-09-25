@@ -1,16 +1,12 @@
-import { Input } from "@material-tailwind/react";
-
 import React, { useEffect, useState } from "react";
-
-import Navbar from "../components/layout/dashboard-navbar";
-import Sidebar from "../components/layout/slidebar";
-import styles from "../styles/Home.module.css";
-
-import RPC from "../utils/ethersRPC";
 import { Web3Auth } from "@web3auth/web3auth";
 import { getProviders, getWeb3Auth } from "components/Helper";
 import { SafeEventEmitterProvider } from "@web3auth/base";
-import { ethers } from "ethers";
+import Navbar from "../components/layout/dashboard-navbar";
+import Sidebar from "../components/layout/slidebar";
+import styles from "../styles/Home.module.css";
+import RPC from "../utils/ethersRPC";
+
 
 export default function History() {
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
