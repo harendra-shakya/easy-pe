@@ -78,7 +78,7 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <div className={`shadow-2xl ${styles.bigCard}`}>
+          <div className={`shadow-2xl ${styles.card}`}>
             <div className={styles.buttonCard}>
               Balances:
               <p className="py-2">

@@ -19,8 +19,8 @@
 }
 
 .card {
-  width: 200px;
-  height: 160px;
+  width: 240px;
+  height: 180px;
   background-color: white;
   border-radius: 20px;
   display: flex;
@@ -31,7 +31,7 @@
 }
 
 .bigCard {
-  width: 230px;
+  width: 270px;
   height: 180px;
   background-color: white;
   border-radius: 20px;

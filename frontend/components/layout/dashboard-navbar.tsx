@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-
+import RPC from "../../utils/ethersRPC";
+import { Web3Auth } from "@web3auth/web3auth";
 import Link from "next/link";
+import { getWeb3Auth } from "components/Helper";
 
 import {
   Navbar as MTNavbar,
@@ -29,6 +31,16 @@ export default function Navbar({
   const [open, setOpen] = useState(false);
   const navbarItemClasses =
     "flex items-center px-1 py-2 font-normal transition-all duration-250 text-size-sm text-current font-light lg:px-2 cursor-pointer";
+  const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
+
+  async function setUp() {
+    const _web3auth = await getWeb3Auth();
+    setWeb3auth(_web3auth);
+  }
+
+  useEffect(() => {
+    setUp();
+  }, [web3auth]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -81,7 +93,12 @@ export default function Navbar({
         offset={-2.5}
       >
         <Link href="/">
-          <a className="fa fa-sign-out mr-2 py-3 text-base opacity-70">
+          <a
+            className="fa fa-sign-out mr-2 py-3 text-base opacity-70"
+            onClick={async () => {
+              await web3auth.logout();
+            }}
+          >
             Sign Out
           </a>
         </Link>

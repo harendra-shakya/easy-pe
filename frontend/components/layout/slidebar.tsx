@@ -110,18 +110,6 @@ export default function Sidebar() {
               </li>
 
               <li className="items-center">
-                <Link href="/invest">
-                  <a
-                    href="#pablo"
-                    className="text-blueGray-700 hover:text-blueGray-500 block py-3 text-xs font-bold uppercase"
-                  >
-                    <i className="fas fa-donate text-blueGray-300 mr-2 text-sm"></i>{" "}
-                    Invest
-                  </a>
-                </Link>
-              </li>
-
-              <li className="items-center">
                 <Link href="/chat">
                   <a
                     href="#pablo"
