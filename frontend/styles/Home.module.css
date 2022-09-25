@@ -9,8 +9,7 @@
 .backgroundParent2 {
   height: 100vh;
   display: grid;
-  align-items: center;
-  justify-content: space-evenly;
+  align-items: flex-end;
   background-image: url("/img/bg-header.jpg");
 }
 

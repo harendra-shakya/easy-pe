@@ -9,6 +9,7 @@ import RPC from "../utils/ethersRPC";
 import { Web3Auth } from "@web3auth/web3auth";
 import { getProviders, getWeb3Auth } from "components/Helper";
 import { SafeEventEmitterProvider } from "@web3auth/base";
+import { Web3Storage } from "web3.storage";
 
 export default function Pay() {
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
@@ -57,6 +58,42 @@ export default function Pay() {
     }
   };
 
+  const makeInvoice = async (_to: string, _from: string) => {
+    try {
+      console.log("making invoices...");
+      const token = process.env.NEXT_PUBLIC_API_TOKEN;
+      console.log("api token", token);
+      const client = new Web3Storage({ token });
+
+      if (!web3auth) {
+        console.log("web3auth not initialized yet");
+        return;
+      }
+      const user = await web3auth.getUserInfo();
+      console.log(user);
+
+      const currency = "MATIC";
+
+      const object = {
+        to: _to,
+        senderName: user.name,
+        senderEmail: user.email,
+        from: _from,
+        amount: `${amount} ${currency}`,
+      };
+
+      const blob = new Blob([JSON.stringify(object)], {
+        type: "application/json",
+      });
+      const files = [new File([blob], `${user?.email}Invoice.json`)];
+      const cid = await client.put(files);
+      console.log("cid", cid);
+      console.log("invoices stored on web3storage");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleSend = async () => {
     try {
       setIsDisabled(true);
@@ -90,6 +127,8 @@ export default function Pay() {
         const receipt = await rpc.sendTransaction(toAddress, amount);
         console.log(receipt);
         alert("Tx sent successfully!");
+        const fromAddress = await rpc.getAccounts();
+        makeInvoice(toAddress, fromAddress);
       } else {
         setInfo("No user found with this email address.");
       }
