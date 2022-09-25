@@ -82,9 +82,8 @@ export default function Dashboard() {
             <div className={styles.buttonCard}>
               Balances:
               <p className="py-2">
-                Your MATIC Balance: {(+balance)?.toFixed(2)}
+                Your Balance: {(+balance)?.toFixed(2)} MATIC
               </p>
-              <p>Your USDC Balance: 0</p>
             </div>
           </div>
         </div>
