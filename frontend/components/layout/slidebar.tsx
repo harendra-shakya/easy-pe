@@ -103,7 +103,7 @@ export default function Sidebar() {
                     href="#pablo"
                     className="text-blueGray-700 hover:text-blueGray-500 block py-3 text-xs font-bold uppercase"
                   >
-                    <i className="fa fa-money text-blueGray-300 mr-2 text-sm"></i>{" "}
+                    <i className="fa fa-paper-plane text-blueGray-300 mr-2 text-sm"></i>{" "}
                     Pay
                   </a>
                 </Link>
@@ -117,6 +117,18 @@ export default function Sidebar() {
                   >
                     <i className="fa fa-envelope text-blueGray-300 mr-2 text-sm"></i>{" "}
                     Chat
+                  </a>
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link href="/withdraw">
+                  <a
+                    href="#pablo"
+                    className="uppercasetext-blueGray-700 hover:text-blueGray-500 block py-3 text-xs font-bold"
+                  >
+                    <i className="fa fa-money text-blueGray-300 mr-2 text-sm"></i>{" "}
+                    Withdraw
                   </a>
                 </Link>
               </li>

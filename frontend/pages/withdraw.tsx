@@ -1,11 +1,8 @@
-import { ethers, Contract } from "ethers";
-import easyPeAbi from "../constants/EasyPe.json";
-import contractAddresses from "../constants/networkMapping.json";
-import React, { useEffect, useState } from "react";
 import Navbar from "../components/layout/dashboard-navbar";
 import Sidebar from "../components/layout/slidebar";
 import styles from "../styles/Home.module.css";
 import RPC from "../utils/ethersRPC";
+import React, { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
 import { getProviders, getWeb3Auth } from "components/Helper";
 import { SafeEventEmitterProvider } from "@web3auth/base";
@@ -18,9 +15,8 @@ export default function Pay() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [balance, setBalance] = useState("0");
   const [amount, setAmount] = useState("");
-  const [toEmail, setToEmail] = useState("");
+  const [toAddress, setToAddress] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
-  const [info, setInfo] = useState("");
 
   async function setUp() {
     const _provider = await getProviders();
@@ -94,45 +90,19 @@ export default function Pay() {
     }
   };
 
-  const handleSend = async () => {
+  const handleWithdraw = async () => {
     try {
       setIsDisabled(true);
-      setInfo("");
-      const ethersProvider = await new ethers.providers.Web3Provider(provider);
-      const signer = await ethersProvider.getSigner();
-
-      const contractAddress: string = await contractAddresses["80001"][
-        "EasyPe"
-      ][0];
-      const contract: Contract = await new ethers.Contract(
-        contractAddress,
-        easyPeAbi,
-        signer
-      );
-
-      const emailHash = await ethers.utils.keccak256(
-        ethers.utils.toUtf8Bytes(toEmail)
-      );
-
-      const isEmailRegistered = await contract.isEmailRegistered(emailHash);
-      const toAddress = await contract.getAddress(emailHash);
-
-      if (isEmailRegistered) {
-        console.log("Sending Tx......");
-        if (!provider) {
-          console.log("provider not initialized yet");
-          return;
-        }
-        const rpc = await new RPC(provider);
-        const receipt = await rpc.sendTransaction(toAddress, amount);
-        console.log(receipt);
-        alert("Tx sent successfully!");
-        const fromAddress = await rpc.getAccounts();
-        await makeInvoice(toAddress, fromAddress);
-      } else {
-        setInfo("No user found with this email address.");
+      if (!provider) {
+        alert("Provider not intilized");
+        return;
       }
-
+      const rpc = await new RPC(provider);
+      const receipt = await rpc.sendTransaction(toAddress, amount);
+      console.log(receipt);
+      alert("Tx withdrawn successfully!");
+      const fromAddress = await rpc.getAccounts();
+      await makeInvoice(toAddress, fromAddress);
       setIsDisabled(false);
     } catch (e) {
       console.log(e);
@@ -154,14 +124,13 @@ export default function Pay() {
                   <form>
                     <div className="relative mb-3 w-full">
                       <label className="mb-2 block text-xs font-bold uppercase text-blue-600">
-                        Send To
+                        Withdraw Crypto To
                       </label>
                       <input
-                        type="email"
                         className="placeholder-blueGray-300 text-blueGray-600 w-full rounded border-0 bg-white px-3 py-3 text-sm transition-all duration-150 ease-linear focus:outline-none focus:ring"
-                        placeholder="Email"
+                        placeholder="Enter your exchange/metamask address"
                         onChange={(e) => {
-                          setToEmail(e.target.value);
+                          setToAddress(e.target.value);
                         }}
                       />
                     </div>
@@ -179,11 +148,10 @@ export default function Pay() {
                         }}
                       />
                     </div>
-                    <div>{info}</div>
                     <button
                       className="mr-1 mb-1 w-full rounded bg-blue-600 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-blue-600"
                       type="button"
-                      onClick={handleSend}
+                      onClick={handleWithdraw}
                       disabled={isDisabled}
                     >
                       {isDisabled ? "Sending...." : "Send"}
