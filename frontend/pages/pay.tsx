@@ -110,14 +110,31 @@ export default function Pay() {
         signer
       );
 
+      const email = (await web3auth.getUserInfo())?.email;
       const emailHash = await ethers.utils.keccak256(
-        ethers.utils.toUtf8Bytes(toEmail)
+        ethers.utils.toUtf8Bytes(email)
       );
 
       const isEmailRegistered = await contract.isEmailRegistered(emailHash);
-      const toAddress = await contract.getAddress(emailHash);
 
-      if (isEmailRegistered) {
+      if (!isEmailRegistered) {
+        console.log("Not registered, registering email....");
+        await contract.register(emailHash);
+      }
+
+      const get = await contract.getAddress(emailHash);
+      console.log("got this address", get);
+      console.log("contractAddress", contractAddress);
+      console.log("contract", contract);
+
+      const toEmailHash = await ethers.utils.keccak256(
+        ethers.utils.toUtf8Bytes(toEmail)
+      );
+
+      const isToEmailRegistered = await contract.isEmailRegistered(toEmailHash);
+      const toAddress = await contract.getAddress(toEmailHash);
+
+      if (isToEmailRegistered) {
         console.log("Sending Tx......");
         if (!provider) {
           console.log("provider not initialized yet");

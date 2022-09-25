@@ -118,44 +118,6 @@ function Login() {
     }
   };
   const redirect = async () => {
-    const ethersProvider = await new ethers.providers.Web3Provider(provider);
-    const signer = await ethersProvider.getSigner();
-
-    const contractAddress: string = await contractAddresses["80001"][
-      "EasyPe"
-    ][0];
-    const contract: Contract = await new ethers.Contract(
-      contractAddress,
-      easyPeAbi,
-      signer
-    );
-
-    const email = (await getUserInfo())?.email;
-    const emailHash = await ethers.utils.keccak256(
-      ethers.utils.toUtf8Bytes(email)
-    );
-    console.log("email", email);
-    console.log("hash", emailHash);
-
-    const isEmailRegistered = await contract.isEmailRegistered(emailHash);
-
-    console.log("isEmailRegistered", isEmailRegistered);
-
-    if (!isEmailRegistered) {
-      console.log("Not registered, registering email....");
-
-      const userAddress = await getAddress();
-
-      console.log("address", userAddress);
-      await contract.register(emailHash);
-    } else {
-      console.log("User Already Registered!");
-    }
-    const get = await contract.getAddress(emailHash);
-    console.log("got this address", get);
-    console.log("contractAddress", contractAddress);
-    console.log("contract", contract);
-
     Router.push("/dashboard");
   };
 
