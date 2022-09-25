@@ -1,16 +1,13 @@
-import { Input } from "@material-tailwind/react";
-
-import React, { useEffect, useState } from "react";
-
-import Navbar from "../components/layout/dashboard-navbar";
-import Sidebar from "../components/layout/slidebar";
-import styles from "../styles/Home.module.css";
-
-import RPC from "../utils/ethersRPC";
+import { Intercom, Window, Launcher } from "@relaycc/receiver";
 import { Web3Auth } from "@web3auth/web3auth";
 import { getProviders, getWeb3Auth } from "components/Helper";
 import { SafeEventEmitterProvider } from "@web3auth/base";
 import { ethers } from "ethers";
+import React, { useEffect, useState } from "react";
+import Navbar from "../components/layout/dashboard-navbar";
+import Sidebar from "../components/layout/slidebar";
+import styles from "../styles/Home.module.css";
+import RPC from "../utils/ethersRPC";
 
 export default function Chat() {
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
@@ -19,6 +16,7 @@ export default function Chat() {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [balance, setBalance] = useState("0");
   const [user, setUser] = useState<any>();
+  const [signer, setSigner] = useState();
 
   async function setUp() {
     const _provider = await getProviders();
@@ -29,6 +27,11 @@ export default function Chat() {
     setProvider(_provider);
     setBalance(_balance);
     setUser(_user);
+    if (provider) {
+      const ethersProvider = await new ethers.providers.Web3Provider(provider);
+      const _signer = await ethersProvider.getSigner();
+      setSigner(_signer);
+    }
   }
 
   useEffect(() => {
@@ -86,7 +89,17 @@ export default function Chat() {
       <Sidebar />
       <div className="bg-blueGray-600 relative md:ml-64">
         <Navbar />
-        <div className={`${styles.backgroundParent}`}></div>
+        <div className={`${styles.backgroundParent}`}>
+          <div className="App">
+            <div className="App">
+              <Launcher wallet={signer} />
+              <Intercom>
+                <Window />
+              </Intercom>
+            </div>
+          </div>
+          <div className="pt-96 font-semibold">Powered by XMTP</div>
+        </div>
       </div>
     </>
   );
