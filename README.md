@@ -1,10 +1,16 @@
-Deployed on Polygon testnet [Live Server](https://easy-pe.vercel.app/)
 
 EasyPe is PayPal for crypto. This project aims to become PayPal for crypto but with too less charges no waiting time and is powered by blockchain technology.
 
 Freelancers and merchants have to pay so high fees to centralized web2 companies that's I built EasyPe. With this, you can send crypto to anyone just with an email address only, which means it is as simple as other web2 companies but with the benefits of blockchain.
 
 For receiving crypto payments you don't need to set up any external wallet, you can directly log in with your Google account hassle-free and start sending and receiving payments with your email address only. We are on a mission to make people's life easy by abstracting complex stuff.
+
+Note: It's just a MVP. 
+
+[Demo](https://ethglobal.com/showcase/easype-waujz)
+
+[Live Server](https://easy-pe.vercel.app/)
+
 
 # Goal of this project
 
