@@ -5,11 +5,10 @@ Freelancers and merchants have to pay so high fees to centralized web2 companies
 
 For receiving crypto payments you don't need to set up any external wallet, you can directly log in with your Google account hassle-free and start sending and receiving payments with your email address only. We are on a mission to make people's life easy by abstracting complex stuff.
 
-Note: It's just a MVP. 
+It is just a POC. More info [Live Server](https://easy-pe.vercel.app/)
 
 [Demo](https://ethglobal.com/showcase/easype-waujz)
 
-[Live Server](https://easy-pe.vercel.app/)
 
 
 # Goal of this project
